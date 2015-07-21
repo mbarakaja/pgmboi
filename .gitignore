@@ -1,9 +1,12 @@
+*.pyc
+*.pyo
+
 # Enviroment config files and folers
-.venv/
+.venv
 
 # Distribution / packaging
-.eggs/
-*.egg-info/
+.eggs
+*.egg-info
 
 # IDE that you are using
 *.sublime-project
