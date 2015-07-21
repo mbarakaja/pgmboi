@@ -8,3 +8,6 @@
 # IDE that you are using
 *.sublime-project
 *.sublime-workspace
+
+# Documentation
+docs/_build
