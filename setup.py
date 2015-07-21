@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
 import io
@@ -44,11 +44,15 @@ class PyTest(TestCommand):
 setup(
     name='pgmboi',
     version=version,
-    author='Jose Maria Dominguez',
-    tests_require=['pytest'],
+
+    packages=find_packages(),
+    include_package_data=True,
     install_requires=['psycopg2', 'click'],
+
+    tests_require=['pytest'],
     cmdclass={'test': PyTest},
 
+    author='Jose Maria Dominguez',
     description='Dump a PostgreSQL database schema for easy revision control.',
     long_description=long_description,
 
