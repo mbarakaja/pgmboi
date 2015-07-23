@@ -14,11 +14,11 @@ class Config(object):
     """The Config object hold all the properties needed to connect
     to the database.
 
-    :pareama host: hostname where the database server is located
-    :pareama port: connection port
-    :pareama database: database name.
-    :pareama user: username
-    :pareama password: password
+    :param host: hostname where the database server is located
+    :param port: connection port
+    :param database: database name.
+    :param user: username
+    :param password: password
     :type port: int
     """
 
