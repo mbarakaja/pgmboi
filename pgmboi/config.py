@@ -16,51 +16,53 @@ class Config(object):
 
     :param host: hostname where the database server is located
     :param port: connection port
-    :param database: database name.
+    :param database: database name
     :param user: username
     :param password: password
     :type port: int
     """
 
-    def __init__(self, host='locahost',
+    def __init__(self, host='localhost',
                  port=5432, database=None,
                  user='postgres', password=None):
+
         self.host = host
         self.port = port
-        self.database = None
+        self.database = database
         self.user = user
-        self.password = None
+        self.password = password
 
-    def load_json(self):
+    def load_json(self, overwrite=False):
         """ Load the configuration from a json file from the working directory,
         the directory where the application was called."""
 
-        _config = Config()
-        config_dic = None
-
         file_path = working_dir + '/config.json'
 
+        # If we can not load the file
+        # at least try to merge the raw config instance
+        # values to the host instance.
         if not path.exists(file_path):
+            secho('Unable to find a config.json file in the working directory')
             return False
 
         with open(file_path) as f:
-            config_dic = json.load(f)
-            f.close()
-
-        for key in config_dic:
             try:
-                setattr(_config, key, config_dic[key])
-            except Exception, e:
-                secho(e)
+                config_dic = json.load(f)
+            except ValueError, e:
+                secho('Invalid JSON file.')
+                return False
 
-        self.merge(_config)
+        for prop in self.__dict__:
+            try:
+                self.__dict__[prop] = config_dic[prop]
+            except KeyError, e:
+                secho('KeyError: ' + str(e))
 
         return True
 
     @property
-    def is_validate(self):
-        """ This attribute is set to ``True`` if all configuration
-        values are not None."""
+    def is_valid(self):
+        """ Returns ``True`` if all configuration values are not None."""
 
         for prop in self.__dict__:
             if self.__dict__[prop] is None:
