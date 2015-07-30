@@ -5,15 +5,15 @@
     This module dumps a database creating a folder for each
     schema and dumping inside it all the tables in a separate SQL file.
 
-    The order process is the next:
+    The dump process is the next order:
 
-    #. Create a **__header__.sql** in the directory where the application
+    #. Create a **__header__.sql** in the directory where the application \
     was invoked. (need more documentation about what contains this file)
-    #. create a folder with the **name** of the current **schema** inspected.
-    #. Dump inside the folder created all the tables in a separate SQL file
+    #. Create a folder with the **name** of the current **schema** inspected.
+    #. Dump inside the folder created all the tables in a separate SQL file \
     with the name of the *tables* in the database.
-    #. Generat a **relations.json** file. This file container the relationshiop
-    and dependencies between each table in the schema.
+    #. Generat a **relations.json** file. This file container the \
+    relationshiop and dependencies between each table in the schema.
 
 """
 
@@ -30,11 +30,11 @@ print config
 
 
 def dump_header(config):
-    ''' Dump a **__header__.sql** file. This file contain the SQL code for
+    """ Dump a **__header__.sql** file. This file contain the SQL code for
         Schemas and extensions definition.
 
         :returns: Boolean
-    '''
+    """
 
     file_dump = parse_dir('header',  ext='sql.temp')
 

@@ -23,9 +23,8 @@ cursor = None
 def pgpass(config):
     """ Check if a .pgpass file exist in the user home directory.
         If not, create a new file and write in it the database
-        connection configuration in the next format:
+        connection configuration in the next format::
 
-        ::
             hostname:port:database:username:password
     """
 
@@ -63,9 +62,8 @@ def connect(config):
     """ Connect to a PostgreSQL database
 
         :param config: parameters object used in database connection
-        :param config:`class:pgmboi.Config` instance
-        rtype: bool
-
+        :type config: pgmboi.config.Config
+        :returns: bool : True if the connection was successful
     """
 
     pgpass(config)
@@ -94,7 +92,8 @@ def connect(config):
 
 def close():
     ''' Close the database connection
-        :resturns: Boolean
+
+        :resturns: bool
     '''
 
     global cursor
@@ -134,12 +133,14 @@ def get_schemas():
 def get_functions(schema_name=None):
     """ Returns a list of function definitions for all or one schema.
 
-        Each list item are dictionaries with the next values:
-        ::
+        Each list item are dictionaries with the next values::
+
             {'schema': 'public',  # name of the schema
              'name': 'my_function1',  # name of the function
              'lang': 'plpgsql',  # languaje used
              'code': "..."}  # the function definition.
+
+        :returns: list
     """
 
     _list = []
@@ -177,9 +178,7 @@ def get_functions(schema_name=None):
 
 
 def get_triggers():
-    """ List all triggers
-
-    """
+    """List all triggers"""
 
     sql_code = '''SELECT
                 n.nspname as "Schema",
@@ -212,14 +211,12 @@ def get_triggers():
 def get_tables_relationships(schema_name='public'):
     """ Returns the relationship between tables in a *schema*.
 
-        Returns a list of dictionaries with the following structure:
-        ::
+        Returns a list of dictionaries with the following structure::
+
             [{'name': 'table1', 'dependencies': []},
-             {'name': 'table2', 'dependencies': []},
-             {'name': 'table3', 'dependencies': ['table1']},
-             {'name': 'table5', 'dependencies': ['table2', 'table4']},
-             {'name': 'table6', 'dependencies': []},
-             {'name': 'table7', 'dependencies': ['table4']}]
+             {'name': 'table2', 'dependencies': ['table1']},
+             {'name': 'table4', 'dependencies': ['table2', 'table4']},
+             {'name': 'table5', 'dependencies': ['table4']}]
 
         If a table has no dependencies/relationshiop with other tables,
         the attribute **dependencies** only has an empty list.
@@ -288,16 +285,14 @@ def get_tables_relationships(schema_name='public'):
 def get_tables(schema_name='public'):
     """ List all table for a given schema
 
-        Returns a list of dictionaries in the next format:
-        ::
+        Returns a list of dictionaries in the next format::
+
             [{'oid': 00000, 'name': 'table1'},
              {'oid': 00000, 'name': 'table2'},
-             {'oid': 00000, 'name': 'table3'},
-             {'oid': 00000, 'name': 'table4'},
-             {'oid': 00000, 'name': 'table5'}]
+             {'oid': 00000, 'name': 'table3'}]
 
         :param schema_name: The name to use.
-        :returns:  list -- A list of dictionaries.
+        :returns: list
     """
 
     query = '''SELECT
