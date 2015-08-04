@@ -18,15 +18,14 @@
 """
 
 
-from os import path, remove, linesep
+from os import path, remove, linesep, makedirs
+import json
 from subprocess import call
 from click import secho
 
 from .utils import parse_dir
 from . import database
 from . import config
-
-print config
 
 
 def dump_header(config):
@@ -163,6 +162,43 @@ def dump_table(table_name, schema_name='public'):
     table_file.close()
 
     secho(' |-- ' + table_name)
+
+    return True
+
+
+def dump_database():
+    """ Dump an entire database in the current working directory.
+
+        Create a folder for each database schema and dumps inside it
+        all tables that correspond to that schema.
+    """
+
+    if not dump_header(config):
+        return False
+
+    schemas = database.get_schemas()
+
+    for schema_name in schemas:
+        secho(schema_name, fg='blue', bold=True)
+
+        folder_path = parse_dir(schema_name)
+        if not path.exists(folder_path):
+            makedirs(folder_path)
+
+        dump_functions(schema_name)
+
+        tables = database.get_tables(schema_name)
+
+        for table in tables:
+            table_name = table['name']
+            dump_table(schema_name, table_name)
+
+        # before dump all individual files dump a file with the relationships
+        relations = database.get_tables_relationships(schema_name)
+        file_path = folder_path + '/relations.json'
+
+        with open(file_path, 'w') as relations_json:
+            json.dump(relations, relations_json)
 
     return True
 
