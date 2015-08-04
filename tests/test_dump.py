@@ -1,6 +1,6 @@
-from mock import mock_open
+from mock import mock_open, Mock
 from mocks import ContextualStringIO
-from pg_dump import dumped_schema
+from pg_dump import dumped_schema, dumped_table
 
 from pgmboi import Config, dump
 
@@ -40,3 +40,24 @@ def test_dump_functions(mocker):
     assert dump.dump_functions('public')  # must return True
     assert m.called  # must be called
     assert m().write.called  # get a file-lick object from the mock function
+
+
+def test_dump_table(mocker):
+    # MOCKS:
+    mocker.patch('pgmboi.dump.remove').return_value = True
+    mocker.patch('pgmboi.dump.call').return_value = 0
+    mocker.patch('pgmboi.dump.path.exists').return_value = True
+    mocker.patch('pgmboi.dump.config').return_value = Config()
+
+    temp_file = ContextualStringIO(dumped_table)
+    parsed_file = ContextualStringIO()
+    parsed_file.writelines = Mock(return_value=None, nama="writelines")
+
+    file_objects = [temp_file, parsed_file]
+
+    m = mocker.patch('__builtin__.open', side_effect=file_objects)
+
+    assert dump.dump_table('table1')
+    assert m.called
+    assert len(m.mock_calls) == 2
+    assert parsed_file.writelines.called
