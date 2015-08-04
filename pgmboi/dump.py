@@ -122,7 +122,7 @@ def dump_table(table_name, schema_name='public'):
                      '-f', temp_file])
 
     if not path.exists(temp_file):
-        message = ' |-- ' + table_name + ' -- ' + secho('dump failed')
+        message = ' |-- ' + str(table_name) + ' -- dump failed'
         secho(message)
         return False
 
