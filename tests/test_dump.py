@@ -61,3 +61,31 @@ def test_dump_table(mocker):
     assert m.called
     assert len(m.mock_calls) == 2
     assert parsed_file.writelines.called
+
+
+def test_dump_database(mocker):
+    mocker.patch('__builtin__.open')
+    mocker.patch('pgmboi.dump.makedirs').return_value = None
+
+    mocker.patch('pgmboi.database.get_schemas').return_value = ['public',
+                                                                'private']
+
+    tables = [{'oid': 00000, 'name': 'table1'},
+              {'oid': 00000, 'name': 'table2'},
+              {'oid': 00000, 'name': 'table3'}]
+    mocker.patch('pgmboi.database.get_tables').return_value = tables
+
+    r = [{'name': 'table1', 'dependencies': []},
+         {'name': 'table2', 'dependencies': ['table1']},
+         {'name': 'table4', 'dependencies': ['table2', 'table4']},
+         {'name': 'table5', 'dependencies': ['table4']}]
+    mocker.patch('pgmboi.database.get_tables_relationships').return_value = r
+
+    mocker.patch('pgmboi.dump.dump_header').return_value = True
+    mocker.patch('pgmboi.dump.dump_functions').return_value = True
+    mocker.patch('pgmboi.dump.dump_table').return_value = True
+
+    c = Config(database='database1', password='123')
+    mocker.patch('pgmboi.dump.config').return_value = c
+
+    assert dump.dump_database()
