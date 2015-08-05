@@ -41,7 +41,6 @@ class MockCursor(object):
         self.description = description
 
     def execute(self, *args):
-        print args
         return True
 
     def fetchall(self):
