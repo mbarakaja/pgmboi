@@ -48,15 +48,15 @@ class Config(object):
         with open(file_path) as f:
             try:
                 config_dic = json.load(f)
-            except ValueError, e:
+            except ValueError:
                 secho('Invalid JSON file.')
                 return False
 
         for prop in self.__dict__:
             try:
                 self.__dict__[prop] = config_dic[prop]
-            except KeyError, e:
-                secho('KeyError: ' + str(e))
+            except KeyError:
+                continue
 
         return True
 
