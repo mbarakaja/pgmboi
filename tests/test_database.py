@@ -1,4 +1,6 @@
+from mock import Mock
 from mocks import Column, MockCursor
+from pgmboi.config import Config
 
 
 def cursor_for_schemas():
@@ -71,6 +73,26 @@ def get_tables(schema_name='public'):
 # Tests
 #
 # ---------------------------
+
+def test_connection(mocker):
+
+    from pgmboi import database
+
+    # connection with a invalid config instance
+    config = Config()
+    assert not database.connect(config)
+
+    # connection with invalid credentials
+    config.database = 'database1'
+    config.password = '123'
+    assert not database.connect(config)
+
+    # mock for a successful connection
+    conn = mocker.patch('pgmboi.database.psycopg2.connect')
+    conn().closed = 0
+
+    assert database.connect(config)
+
 
 def test_get_schemas():
     from pgmboi import database
