@@ -6,7 +6,6 @@
 
 import psycopg2
 import psycopg2.extensions
-import sys
 import os
 
 from click import secho
@@ -39,6 +38,9 @@ def pgpass(config):
     else:
         pgpass_file = open(pgpass_path, 'w')
 
+    if not config.is_valid:
+        return False
+
     # hostname:port:database:username:password
     pgpass_string = config.host + ':'
     pgpass_string += str(config.port) + ':'
@@ -57,6 +59,8 @@ def pgpass(config):
 
     os.chmod(pgpass_path, 0600)
 
+    return True
+
 
 def connect(config):
     """ Connect to a PostgreSQL database
@@ -66,35 +70,39 @@ def connect(config):
         :returns: bool : True if the connection was successful
     """
 
+    if not config.is_valid:
+        return False
+
     pgpass(config)
 
-    print 'connecting to ' + config.database + ' ...'
+    secho('connecting to ' + config.database + ' ...')
 
-    connection_config = 'host=' + config.host +\
-                        ' dbname=' + config.database +\
-                        ' user=' + config.user +\
-                        ' password=' + config.password +\
+    connection_config = 'host=' + str(config.host) +\
+                        ' dbname=' + str(config.database) +\
+                        ' user=' + str(config.user) +\
+                        ' password=' + str(config.password) +\
                         ' port=' + str(config.port)
     try:
         global connection
         global cursor
         connection = psycopg2.connect(connection_config)
+    except psycopg2.OperationalError as e:
+        secho(str(e))
+
+    if connection and connection.closed == 0:
+        secho('successful connection', fg='green')
         cursor = connection.cursor()
-    except ValueError as e:
-        print e
-        sys.exit()
-        return False
+        return True
 
-    secho('successful connection', fg='green')
-
-    return True
+    secho('Unable to connect to database', fg='red')
+    return False
 
 
 def close():
-    ''' Close the database connection
+    """ Close the database connection
 
         :resturns: bool
-    '''
+    """
 
     global cursor
     global connection
@@ -112,7 +120,7 @@ def close():
 
 
 def get_schemas():
-    ''' Returns a list of schemas for a given database.'''
+    """Returns a list of schemas for a given database."""
 
     query = '''SELECT n.nspname AS "name"
         FROM pg_catalog.pg_namespace n
