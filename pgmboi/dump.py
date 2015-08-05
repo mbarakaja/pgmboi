@@ -114,11 +114,14 @@ def dump_table(table_name, schema_name='public'):
 
     # -s schema only
     # -Fp : -File -plain text
-    call(['pg_dump', '-h', config.host, '-p', str(config.port),
-                     '-d', config.database, '-U', config.user,
-                     '--no-owner', '-s', '--no-tablespaces',
-                     '-Fp', '-t', schema_name + '.' + table_name,
-                     '-f', temp_file])
+    code = call(['pg_dump', '-h', config.host, '-p', str(config.port),
+                            '-d', config.database, '-U', config.user,
+                            '--no-owner', '-s', '--no-tablespaces',
+                            '-Fp', '-t', schema_name + '.' + table_name,
+                            '-f', temp_file])
+
+    if code:
+        return False
 
     if not path.exists(temp_file):
         message = ' |-- ' + str(table_name) + ' -- dump failed'
@@ -191,7 +194,7 @@ def dump_database():
 
         for table in tables:
             table_name = table['name']
-            dump_table(schema_name, table_name)
+            dump_table(table_name, schema_name)
 
         # before dump all individual files dump a file with the relationships
         relations = database.get_tables_relationships(schema_name)
