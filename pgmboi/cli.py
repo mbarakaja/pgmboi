@@ -1,3 +1,13 @@
+"""
+    pgmboi.cli
+    ~~~~~~~~~~
+
+    This module manages the commands and arguments passed through the terminal
+    to the application.
+
+    :copyright: (c) 2015 by Jose Moreno
+"""
+
 import sys
 import click
 from click import secho
