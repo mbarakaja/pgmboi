@@ -1,30 +1,24 @@
 pgmboi package
 ==============
 
-Submodules
-----------
+.. automodule:: pgmboi.cli
+    :members:
 
-pgmboi.database module
-----------------------
+
+.. automodule:: pgmboi.config
+    :members:
+
 
 .. automodule:: pgmboi.database
     :members:
-    :undoc-members:
-    :show-inheritance:
 
-pgmboi.pgmboi module
---------------------
+.. automodule:: pgmboi.dump
+    :members:
 
 .. automodule:: pgmboi.pgmboi
     :members:
     :undoc-members:
-    :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: pgmboi
+.. automodule:: pgmboi.utils
     :members:
     :undoc-members:
-    :show-inheritance:
