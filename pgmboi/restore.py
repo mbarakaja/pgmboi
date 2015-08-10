@@ -112,7 +112,7 @@ def restore_tables(schema_name):
                 file_name = r['name']
                 file_path = parse_dir(schema_name, file_name, ext='sql')
 
-                if call_psql(file_path, config):
+                if call_psql(file_path):
                     secho(' |-- ' + file_name)
                     relations.remove(r)
                 else:
