@@ -12,6 +12,7 @@ import sys
 import click
 from click import secho
 from .dump import dump_database
+from .restore import restore_database
 from . import database, config
 
 
@@ -61,4 +62,13 @@ def dump():
         sys.exit(1)
 
     dump_database()
+    database.close()
+
+
+@main.command()
+def restore():
+    if not database.connect(config):
+        sys.exit(1)
+
+    restore_database()
     database.close()
