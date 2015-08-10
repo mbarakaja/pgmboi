@@ -1,40 +1,45 @@
-                            ~ pgmboi ~
+                     ~ pgmboi ~
 
-            Dump a PostgreSQL database in a nice way.
+      Dump a PostgreSQL database in a nice way.
 
 
 ~ What is pgmboi?
 
-This is a small CLI application, that dumps all named schemas, functions
-and tables, in separate folders and SQL files.
+This is a small CLI application, that dumps all named
+schemas, functions and tables, in separate  folders and
+SQL files.
 
-It generates a folder for each schema and then dumps all tables and
-functions inside it.
+It generates a folder for each schema and then dumps
+all tables and functions inside it.
 
-Finally you can restore from the generated SQL files the entire structure
-to a selected database.
+Finally you can restore from the generated SQL files
+the entire structure to a selected database.
 
 
 ~ What is the purpose of this?
 
-Well, I started this project with the objective of facilitating the
-versioning of a database SQL code in git. Trying to emulate packages
-or modules like Python, breaking the schemas in separate 
-folders (packages) and each table in individual file (modules).
+Well, I started this project with the objective of 
+facilitating the versioning of a database SQL code in
+git. Trying to emulate packages or modules like Python,
+breaking the schemas in separate  folders (packages)
+and each table in individual file (modules).
 
-So, when you change something in a table, function or schema in your
-database, you will commit changes on a more simplified and organized
-file, instead of a single big file, like the one pg_dump generates.
+So, when you change something in a table, function or
+schema in your database, you will commit changes on a
+more simplified and organized file, instead of a single
+big file, like the one pg_dump generates.
 
 
 ~ Is this ready?
-A BIG NO. I can't even say that this application are in alpha.
+A BIG NO. I can't even say that this application are in
+alpha.
 
-I am a beginner developer and this is my first open source project 
-and with it I am introducing myself to Python, unit testing and more 
-concept about PostgreSQL.
+I am a beginner developer and this is my first open
+source project  and with it I am introducing myself to
+Python, unit testing and more concept about PostgreSQL.
 
-So, I will appreciate any advice about how to make better test and code. :) 
+So, I will appreciate any advice about how to make
+better test and code. :) 
 
 
 ~ Usage
