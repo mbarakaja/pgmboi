@@ -60,15 +60,22 @@ def test_restore_schema(mock_restore_functions, mock_restore_tables):
     assert mock_restore_tables.called
 
 
-def test_restore_database(mocker):
-    config = Config(database='mydb', password='123')
-    mocker.patch('pgmboi.restore.config', new=config)
-    mocker.patch('pgmboi.restore.call_psql').return_value = True
+@patch('pgmboi.restore.config', new=Config(database='mydb', password='123'))
+@patch('pgmboi.restore.call_psql', return_value=True)
+@patch('pgmboi.restore.path.exists', return_value=False)
+@patch('pgmboi.restore.path.isdir', return_value=True)
+@patch('pgmboi.restore.listdir')
+@patch('pgmboi.restore.restore_schema', return_value=True)
+def test_restore_database(m_restore_schema, m_listdir,
+                          m_isdir, m_exists, m_call_psql):
 
     # 1 - Here we dont have set a fake __heade__.sql file, so, the restore
     # task must return False
     assert not restore.restore_database()
 
-    mocker.patch('pgmboi.restore.path.exists').return_value = True
+    m_exists.return_value = True
+    m_listdir.return_value = ['public', 'private', 'other']
+
     assert restore.restore_database()
     assert restore.call_psql.called
+    assert m_restore_schema.call_count == 3
