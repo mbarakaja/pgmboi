@@ -32,7 +32,7 @@ def test_tables(mocker):
     # mocks
     _exists = mocker.patch('pgmboi.restore.path.exists', return_value=False)
     relations_string = "{}"
-    _open = mocker.patch('pgmboi.restore.open',
+    _open = mocker.patch('__builtin__.open',
                          side_effect=[ContextualStringIO(relations_string),
                                       ContextualStringIO()])
     r = [{'name': 'table1', 'dependencies': []},
