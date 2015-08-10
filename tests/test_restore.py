@@ -28,10 +28,6 @@ def test_restore_functions(mocker):
     assert restore.restore_functions(schema_name)
 
 
-# def test_restore_schema(mocker):
-#     assert restore.restore_database()
-
-
 def test_tables(mocker):
     # mocks
     _exists = mocker.patch('pgmboi.restore.path.exists', return_value=False)
@@ -53,6 +49,15 @@ def test_tables(mocker):
     assert restore.restore_tables('public')
     assert _open.called
     assert _load.called
+
+
+@patch('pgmboi.restore.restore_tables', return_value=True)
+@patch('pgmboi.restore.restore_functions')
+def test_restore_schema(mock_restore_functions, mock_restore_tables):
+
+    assert restore.restore_schema('public')
+    assert mock_restore_functions.called
+    assert mock_restore_tables.called
 
 
 def test_restore_database(mocker):
