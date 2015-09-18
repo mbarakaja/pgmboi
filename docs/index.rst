@@ -3,6 +3,18 @@ Welcome to pgmboi
 
 Dump a PostgreSQL database schema for easy versioning.
 
+Installation
+------------
+
+1.  Clone the repository
+2.  Run the next command in a virtual or main python interpreter, as you
+    prefer::
+
+      $ pip install --editable .
+
+The ``pgmboi`` command should be accesible now from the **terminal**.
+
+
 Usage
 -----
 
@@ -100,7 +112,7 @@ Run this command in the directory where you dump your database, where the
 **__header__.sql** is located. Pass all the parameters for the database
 connection or place a **config.json** with the necessary parameters.::
 
-    $ pgmboi --database mydb --password 123 dump
+    $ pgmboi --database mydb --password 123 restore
 
 
 .. warning:: Don't restore on an existing database. Create a new empty database and restore on it.
